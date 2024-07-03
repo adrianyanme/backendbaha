@@ -75,5 +75,6 @@ class PostController extends Controller
         }
         return $randstring;
     }
+    //cek
 
 }
