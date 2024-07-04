@@ -6,6 +6,8 @@ use PHPUnit\Framework\Attributes\Group;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/logout',[AuthenticationController::class, 'logout']);
@@ -26,5 +28,8 @@ Route::get('/posts/{id}',[PostController::class,'show']);
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::post('register', [AuthenticationController::class, 'register']);
 Route::get('verify/{id}', [AuthenticationController::class, 'verifyEmail']);
+
+Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail']);
+
 
 
