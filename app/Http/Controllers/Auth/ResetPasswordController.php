@@ -51,9 +51,11 @@ class ResetPasswordController extends Controller
             }
         );
 
-        return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
-                    : redirect()->back()->withErrors(['email' => [__($status)]])->withInput();
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('password.reset.success')->with('status', __($status));
+        } else {
+            return redirect()->back()->withErrors(['email' => [__($status)]])->withInput();
+        }
     }
     public function showResetForm(Request $request, $token = null)
     {
