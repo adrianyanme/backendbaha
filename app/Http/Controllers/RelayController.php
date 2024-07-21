@@ -119,5 +119,15 @@ class RelayController extends Controller
 
         return response()->json(['message' => 'Device added successfully', 'device' => $device], 201);
     }
+
+    public function getDevices()
+    {
+        $user = Auth::user();
+        $userId = $user->parent_id ?? $user->id;
+
+        $devices = Perangkat::where('user_id', $userId)->get();
+
+        return response()->json(['devices' => $devices]);
+    }
 }
 ///

@@ -27,6 +27,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/relay/open', [RelayController::class, 'openRelay']);
     Route::post('/relay/close', [RelayController::class, 'closeRelay']);
     Route::post('/relay/add', [RelayController::class, 'addDevice']); 
+    Route::get('/relay/devices', [RelayController::class, 'getDevices']);
 
 
 });
@@ -52,7 +53,6 @@ Route::post('/control-door', [AccountManagementController::class, 'controlDoorFr
 
 
 // Route to update status from NodeMCU
-Route::post('/update-status', [DeviceStatusController::class, 'updateStatus']);
 Route::get('/get-instruction/{serial_number}', [RelayController::class, 'getRelayStatus']);
 
 // New routes for device instructions
