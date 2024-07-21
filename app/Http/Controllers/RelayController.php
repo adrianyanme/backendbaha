@@ -120,3 +120,4 @@ class RelayController extends Controller
         return response()->json(['message' => 'Device added successfully', 'device' => $device], 201);
     }
 }
+///
