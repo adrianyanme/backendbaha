@@ -13,28 +13,27 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-
 class AuthenticationController extends Controller
 {
     public function login(Request $request)
-{
-    $request->validate([
-        'login' => 'required',
-        'password' => 'required',
-    ]);
-
-    $user = User::where('email', $request->login)
-                ->orWhere('username', $request->login)
-                ->first();
-
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'login' => ['The provided credentials are incorrect.'],
+    {
+        $request->validate([
+            'login' => 'required',
+            'password' => 'required',
         ]);
-    }
 
-    return $user->createToken('user login')->plainTextToken;
-}
+        $user = User::where('email', $request->login)
+                    ->orWhere('username', $request->login)
+                    ->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'login' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+
+        return $user->createToken('user login')->plainTextToken;
+    }
 
     public function logout(Request $request)
     {
@@ -46,32 +45,7 @@ class AuthenticationController extends Controller
         return response()->json(Auth::user());
     }
 
-    // public function register(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'email' => 'required|email|unique:users',
-    //         'username' => 'required',
-    //         'firstname' => 'required',
-    //         'lastname' => 'required',
-    //         'password' => 'required|min:6',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json(['errors' => $validator->errors()], 422);
-    //     }
-
-    //     $user = User::create([
-    //         'email' => $request->email,
-    //         'username' => $request->username,
-    //         'firstname' => $request->firstname,
-    //         'lastname' => $request->lastname,
-    //         'password' => Hash::make($request->password),
-    //     ]);
-
-    //     return new UserResource($user);
-    // }
-
-    public function register(Request $request)
+    public function registerMaster(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
@@ -91,21 +65,15 @@ class AuthenticationController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'password' => Hash::make($request->password),
-        ]);
-
-        Profile::create([
-            'user_id' => $user->id,
-            'username' => $request->username,
+            'parent_id' => null, // Akun master tidak memiliki parent
+            'role' => 'master', // Set role sebagai master
         ]);
 
         // Kirim email verifikasi
         Mail::to($user->email)->send(new VerifyEmail($user));
 
-
-
         return new UserResource($user);
     }
-
 
     public function verifyEmail($id)
     {
@@ -121,7 +89,4 @@ class AuthenticationController extends Controller
     
         return response()->json(['message' => 'User not found.'], 404);
     }
-    
-
-
 }

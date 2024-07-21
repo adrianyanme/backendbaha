@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -24,7 +25,9 @@ class User extends Authenticatable
         'firstname',
         'lastname',
         'password',
-        'remember_token'
+        'remember_token',
+        'parent_id',
+        'role'
     ];
 
     /**
@@ -49,5 +52,26 @@ class User extends Authenticatable
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+
+    public function children()
+    {
+        return $this->hasMany(User::class, 'parent_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(User::class, 'parent_id');
+    }
+
+    public function perangkat()
+    {
+        return $this->hasMany(Perangkat::class);
+    }
+
+    public function generateApiToken()
+    {
+        $this->api_token = Str::random(60);
+        $this->save();
     }
 }
