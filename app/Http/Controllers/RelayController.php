@@ -54,6 +54,8 @@ class RelayController extends Controller
             'user_id' => $user->id,
             'device_id' => $device->id,
             'action' => 'open',
+            'username' => $user->username,
+            'nama_perangkat' => $device->nama_perangkat,
         ]);
 
         return response()->json(['message' => 'Relay opened']);
@@ -92,6 +94,8 @@ class RelayController extends Controller
             'user_id' => $user->id,
             'device_id' => $device->id,
             'action' => 'close',
+            'username' => $user->username,
+            'nama_perangkat' => $device->nama_perangkat,
         ]);
 
         return response()->json(['message' => 'Relay closed']);
@@ -108,6 +112,7 @@ class RelayController extends Controller
     {
         $request->validate([
             'serial_number' => 'required|string|unique:perangkats,serial_number',
+            'nama_perangkat' => 'required|string',
         ]);
 
         $user = Auth::user();
@@ -115,6 +120,7 @@ class RelayController extends Controller
         $device = Perangkat::create([
             'serial_number' => $request->serial_number,
             'user_id' => $user->id,
+            'nama_perangkat' => $request->nama_perangkat,
         ]);
 
         return response()->json(['message' => 'Device added successfully', 'device' => $device], 201);
@@ -128,6 +134,20 @@ class RelayController extends Controller
         $devices = Perangkat::where('user_id', $userId)->get();
 
         return response()->json(['devices' => $devices]);
+    }
+
+    public function getAllDeviceLogs(Request $request)
+    {
+        $user = Auth::user();
+        $userId = $user->parent_id ?? $user->id;
+
+        // Ambil semua perangkat yang dimiliki oleh user
+        $devices = Perangkat::where('user_id', $userId)->pluck('id');
+
+        // Ambil semua log dari perangkat yang dimiliki oleh user
+        $logs = Perangkat_logs::whereIn('device_id', $devices)->get();
+
+        return response()->json(['logs' => $logs]);
     }
 }
 ///

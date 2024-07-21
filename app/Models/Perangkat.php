@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Perangkat extends Model
 {
-    protected $fillable = ['serial_number', 'user_id'];
+    protected $fillable = ['serial_number', 'user_id', 'nama_perangkat'];
 
     public function user()
     {

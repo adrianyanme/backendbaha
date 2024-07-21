@@ -28,6 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/relay/close', [RelayController::class, 'closeRelay']);
     Route::post('/relay/add', [RelayController::class, 'addDevice']); 
     Route::get('/relay/devices', [RelayController::class, 'getDevices']);
+    Route::get('/relay/logs', [RelayController::class, 'getAllDeviceLogs']);
 
 
 });

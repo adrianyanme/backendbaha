@@ -13,6 +13,8 @@ class Perangkat_logs extends Model
         'user_id',
         'device_id',
         'action',
+        'username',
+        'nama_perangkat',
     ];
 
     // Relasi ke model User
