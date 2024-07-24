@@ -149,5 +149,35 @@ class RelayController extends Controller
 
         return response()->json(['logs' => $logs]);
     }
+
+    public function deleteDevice(Request $request)
+    {
+        $request->validate([
+            'serial_number' => 'required|string|exists:perangkats,serial_number',
+        ]);
+
+        $user = Auth::user();
+        
+        // Cek apakah user adalah master (parent_id null)
+        if (!is_null($user->parent_id)) {
+            return response()->json(['message' => 'Only master users can delete devices'], 403);
+        }
+
+        $device = Perangkat::where('serial_number', $request->serial_number)
+                           ->where('user_id', $user->id)
+                           ->first();
+
+        if (!$device) {
+            return response()->json(['message' => 'Device not found or you do not have permission to delete it'], 404);
+        }
+
+        // Hapus perangkat
+        $device->delete();
+
+        // Hapus status relay dari cache jika ada
+        Cache::forget('relay_status_' . $device->serial_number);
+
+        return response()->json(['message' => 'Device deleted successfully']);
+    }
 }
 ///
