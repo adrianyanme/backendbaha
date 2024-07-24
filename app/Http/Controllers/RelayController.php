@@ -58,6 +58,10 @@ class RelayController extends Controller
             'nama_perangkat' => $device->nama_perangkat,
         ]);
 
+        $device->update([
+            'status_perangkat' => 'open'
+        ]);
+
         return response()->json(['message' => 'Relay opened']);
     }
 
@@ -96,6 +100,9 @@ class RelayController extends Controller
             'action' => 'close',
             'username' => $user->username,
             'nama_perangkat' => $device->nama_perangkat,
+        ]);
+        $device->update([
+            'status_perangkat' => 'close'
         ]);
 
         return response()->json(['message' => 'Relay closed']);
