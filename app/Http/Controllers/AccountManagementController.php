@@ -33,6 +33,25 @@ class AccountManagementController extends Controller
 
         return response()->json(['message' => 'Child account created successfully', 'child' => $child]);
     }
+    
+    public function deleteChildAccount(Request $request, $childId)
+    {
+        $parent = Auth::user();
+
+        // Cari child account berdasarkan ID dan parent_id
+        $child = User::where('id', $childId)
+                     ->where('parent_id', $parent->id)
+                     ->first();
+
+        if (!$child) {
+            return response()->json(['message' => 'Child account not found or you do not have permission to delete this account'], 404);
+        }
+
+        // Hapus child account
+        $child->delete();
+
+        return response()->json(['message' => 'Child account deleted successfully']);
+    }
 
     public function getChildAccounts()
     {

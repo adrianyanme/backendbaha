@@ -47,6 +47,7 @@ Route::post('/register-master', [AuthenticationController::class, 'registerMaste
 Route::middleware(['auth:sanctum', 'role:master'])->group(function () {
     Route::post('/add-child-account', [AccountManagementController::class, 'addChildAccount']);
     Route::get('/child-accounts', [AccountManagementController::class, 'getChildAccounts']);
+    Route::post('/delete-child-account/{id}', [AccountManagementController::class, 'deleteChildAccount']);
 });
 
 Route::post('/control-door', [AccountManagementController::class, 'controlDoorFromArduino']);
