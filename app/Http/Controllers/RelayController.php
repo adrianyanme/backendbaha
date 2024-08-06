@@ -143,6 +143,12 @@ class RelayController extends Controller
         return response()->json(['devices' => $devices]);
     }
 
+    public function getAllDevices()
+    {
+        $devices = Perangkat::all();
+        return response()->json(['devices' => $devices]);
+    }
+
     public function getAllDeviceLogs(Request $request)
     {
         $user = Auth::user();

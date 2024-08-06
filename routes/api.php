@@ -54,6 +54,7 @@ Route::post('/control-door', [AccountManagementController::class, 'controlDoorFr
 
 // New routes for device management
 
+Route::get('/relay/all-devices', [RelayController::class, 'getAllDevices']);
 
 // Route to update status from NodeMCU
 Route::get('/get-instruction/{serial_number}', [RelayController::class, 'getRelayStatus']);
