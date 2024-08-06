@@ -85,4 +85,11 @@ class AccountManagementController extends Controller
 
         return response()->json(['message' => 'Door ' . $action . 'ed successfully']);
     }
+
+    public function getAllMastersWithChildrenAndDevices()
+    {
+        $masters = User::where('role', 'master')->with(['children', 'devices'])->get();
+
+        return response()->json(['data' => $masters]);
+    }
 }

@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->hasMany(Perangkat::class);
     }
 
+    public function devices()
+    {
+        return $this->hasMany(Perangkat::class, 'user_id');
+    }
+
     public function generateApiToken()
     {
         $this->api_token = Str::random(60);
