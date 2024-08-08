@@ -163,6 +163,14 @@ class RelayController extends Controller
         return response()->json(['logs' => $logs]);
     }
 
+    public function getAllDeviceLogsForAdmin()
+{
+    // Ambil semua log dari semua perangkat
+    $logs = Perangkat_logs::all();
+
+    return response()->json(['logs' => $logs]);
+}
+
     public function deleteDevice(Request $request)
     {
         $request->validate([

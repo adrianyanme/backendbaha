@@ -59,7 +59,7 @@ Route::get('/relay/all-devices', [RelayController::class, 'getAllDevices']);
 // Route to update status from NodeMCU
 Route::get('/get-instruction/{serial_number}', [RelayController::class, 'getRelayStatus']);
 
-
+Route::get('/admin/logs', [RelayController::class, 'getAllDeviceLogsForAdmin']);
 
 Route::get('/masters', [AccountManagementController::class, 'getAllMastersWithChildrenAndDevices']);
 
